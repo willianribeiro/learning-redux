@@ -6,7 +6,6 @@ import {
   RECEIVE_POSTS
 } from './actions'
 
-
 function selectedSubreddit(state = 'reactjs', action) {
   switch (action.type) {
     case SELECT_SUBREDDIT:
