@@ -91,8 +91,6 @@ function mapStateToProps(state) {
     items: []
   }
   
-  console.log('POSTS', posts);
-
   return {
     selectedSubreddit,
     posts,
