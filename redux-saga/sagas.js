@@ -1,5 +1,5 @@
 import { delay } from 'redux-saga'
-import { put, takeEvery, all } from 'redux-saga/effects'
+import { put, takeEvery, call, all } from 'redux-saga/effects'
 
 // saga worker
 export function* helloSaga() {
@@ -8,7 +8,7 @@ export function* helloSaga() {
 
 // saga worker
 export function* incrementAsync() {
-  yield delay(1000)
+  yield call(delay, 1000)
   yield put({ type: 'INCREMENT'})
 }
 
