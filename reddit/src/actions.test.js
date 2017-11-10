@@ -1,3 +1,6 @@
+import configureMockStore from 'redux-mock-store'
+import thunk from 'redux-thunk'
+import fetchMock from 'fetch-mock'
 import {
   selectSubreddit,
   invalidateSubreddit,
@@ -11,8 +14,11 @@ import {
   RECEIVE_POSTS,
 } from './actions'
 
-// Test action creators
-describe('action creators', () => {
+// Mock store
+const middlewares = [thunk]
+const mockStore = configureMockStore(middlewares)
+
+describe('Sync actions', () => {
   it('should create an action to select subreddit', () => {
     const subreddit = 'reactjs'
     const expectedAction = {
@@ -41,5 +47,48 @@ describe('action creators', () => {
     }
 
     expect(requestPosts(subreddit)).toEqual(expectedAction)
+  })
+})
+
+describe('Async actions', () => {
+  afterEach(() => {
+    fetchMock.reset()
+    fetchMock.restore()
+  })
+
+  it('should dispatch RECEIVE_POSTS after fetchPosts() has been done', () => {
+    fetchMock.get(
+      '*',
+      {
+        body: {
+          data: {
+            children: [
+              { data: { subreddit: 'reactjs', title: "Most Promising IoT trends for 2018" } },
+              { data: { subreddit: 'reactjs', title: "JSON and its real world use" } }
+            ]
+          }
+        },
+        headers: { 'content-type': 'application/json' }
+      }
+    )
+
+    const subreddit = 'reactjs';
+    const expectedActions = [
+      { type: REQUEST_POSTS, subreddit: subreddit },
+      {
+        type: RECEIVE_POSTS,
+        subreddit: subreddit,
+        posts: [
+          { subreddit: subreddit, title: "Most Promising IoT trends for 2018" },
+          { subreddit: subreddit, title: "JSON and its real world use" }
+        ]
+      }
+    ]
+
+    const store = mockStore({ posts: [] })
+    return store.dispatch(fetchPosts(subreddit))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions)
+      })
   })
 })

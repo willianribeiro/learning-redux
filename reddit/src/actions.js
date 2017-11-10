@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-fetch'
+import 'isomorphic-fetch'
 
 // ACTION TYPES
 export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT'
@@ -26,7 +26,6 @@ export const receivePosts = (subreddit, response) => ({
   type: RECEIVE_POSTS,
   subreddit,
   posts: response.data.children.map(child => child.data),
-  receivedAt: Date.now()
 })
 
 // THUNKS
