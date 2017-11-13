@@ -7,10 +7,8 @@ import * as types from '../constants/actionTypes';
 // for success or failure operation.
 export function* searchMediaSaga({ payload }) {
   try {
-    const [videos, images] = yield [
-      call(shutterStockVideos, payload),
-      call(flickrImages, payload)
-    ]
+    const videos = yield call(shutterStockVideos, payload);
+    const images = yield call(flickrImages, payload);
 
     yield [
       put({ type: types.SHUTTER_VIDEOS_SUCCESS, videos }),
