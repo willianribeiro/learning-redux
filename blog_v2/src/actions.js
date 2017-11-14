@@ -5,18 +5,20 @@ import * as actionCreator from './actionCreators.js'
 export const fetch_users = dispatch => {
   dispatch(actionCreator.fetch_users_pending())
 
-  axios.get('https://jsonplaceholder.typicode.com/users')
+  return axios.get('https://jsonplaceholder.typicode.com/users')
     .then(response => {
-      dispatch(actionCreator.fetch_users_success(response.data))
+      return dispatch(actionCreator.fetch_users_success(response.data))
     })
     .catch(error => {
-      dispatch(actionCreator.fetch_users_error(error))
+      return dispatch(actionCreator.fetch_users_error(error))
     })
 }
 
 export const fetch_users_if_needed = (users, dispatch) => {
   if (_should_fetch_users(users)) {
-    fetch_users(dispatch)
+    return fetch_users(dispatch)
+  } else {
+    return Promise.resolve()
   }
 }
 
